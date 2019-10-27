@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+</head>
+<body>
+<div id="login">
+    <% if(userinfo) { %>
+        <h1 style="color:red" class="bg"> <%=userinfo.username%>,您好，欢迎您</h1>
+        <button>退出</button>
+    <% }else{ %>
+        <div>
+            <div>
+                <h1 onclick="login()">登录</h1>
+                用户名：<input  type="text" id="username">
+                密码：<input type="text" id="password">
+            </div>
+        </div>
+    <% } %>
+</div>
+</body>
+
+<script type="text/javascript">
+    function login() {
+        $.ajax({
+            type:'post',
+            data:{
+                username:'test', //$('#username').val(),
+                password:'123456' //$('#password').val(),
+                },
+            url:'/users/loginAction',
+            success:function (result) {
+                alert(result.message);
+                window.location.reload();
+            },
+            fail:function (result) {
+                alert(result.message);
+            }
+        })
+    }
+</script>
+</html>
