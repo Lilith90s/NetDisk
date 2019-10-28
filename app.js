@@ -4,13 +4,11 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var Cookies=require('cookies');
 
-
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-
 var app = express();
 
 // view engine setup
@@ -26,11 +24,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 //登录拦截器，必须放在静态资源声明之后、路由导航之前
 app.use(function (req, res, next) {
   var url = req.originalUrl;
-  if (url !== "/users" && !req.cookies.userinfo) {
+  const filterlist = ["/users","/users/loginAction"];
+  if (!filterlist.includes(url) && !req.cookies.userinfo) {
     return res.redirect("/users");
   }
   next();
 });
+
+
+
+
 // app.all('*',usersRouter.requireAuthentication);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

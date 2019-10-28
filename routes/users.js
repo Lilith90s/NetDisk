@@ -3,15 +3,15 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  console.log(req.cookies.userinfo);
+  // console.log(req.cookies);
   res.render('user',{userinfo:req.cookies.userinfo});
 });
 
 router.post('/loginAction', function (req, res, next) {
-
   let resoinseData = {};
   let username = req.body.username;
   let password = req.body.password;
+  //console.log(req.body);
   if (username === '' || password === '') {
     resoinseData.code = 1;
     resoinseData.message = '用户名或密码不能为空!';
@@ -28,12 +28,13 @@ router.post('/loginAction', function (req, res, next) {
     };
 
     // req.cookies('userinfo', JSON.stringify(resoinseData.userinfo));
-    console.log(resoinseData.userinfo);
+    // console.log(resoinseData.userinfo);
     res.cookie('userinfo',resoinseData.userinfo);
     res.json(resoinseData);
-    console.log(resoinseData.userinfo);
+
     //return;
   }
+  // console.log(resoinseData.userinfo);
 });
 
 module.exports = router;
