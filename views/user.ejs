@@ -31,7 +31,7 @@
             url:'/users/loginAction',
             success:function (result) {
                 alert(result.message);
-                window.location.reload();
+                window.location.href = '/';
             },
             fail:function (result) {
                 alert(result.message);

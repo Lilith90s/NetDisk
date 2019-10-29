@@ -17,7 +17,6 @@
           <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Brand</a>
           </div>
-
           <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <form class="navbar-form navbar-left" role="search">
               <div class="form-group">
@@ -59,6 +58,9 @@
             <th>
               大小
             </th>
+              <th>
+                  操作
+              </th>
           </tr>
           </thead>
           <tbody>
@@ -75,6 +77,9 @@
             <td>
               1.4MB
             </td>
+              <td>
+                  <a href="/files/download/test.txt" download="test.txt">下载</a>
+              </td>
           </tr>
           </tbody>
         </table>
@@ -124,7 +129,7 @@
       formData.append('file',$("#input-b9")[0].files[i]);
     };
     $.ajax({
-      url: '/upload',
+      url: '/files/upload',
       type: 'post',
       data: formData,
       contentType: false,
@@ -137,4 +142,7 @@
       }
     })
   }
+  $.ajax({
+    url:'/files'
+  })
 </script>
