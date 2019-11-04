@@ -114,20 +114,12 @@
 </html>
 
 <script>
-/*  $(document).ready(function () {
-    $("#input-b9").fileinput({
-      showPreview:false,
-      showUpload:false,
-      elErrorContainer: '#kartik-file-errors',
-    })
-  })
-*/
   function postFiles() {
     let formData = new FormData();
     // console.log($("#input-b9")[0].files);
     for (let i = 0,len = $("#input-b9")[0].files.length ; i < len; i++) {
       formData.append('file',$("#input-b9")[0].files[i]);
-      console.log($("#input-b9")[0].files[i]);
+      //console.log($("#input-b9")[0].files[i]);
     };
     $.ajax({
       url: '/files/upload',
@@ -136,7 +128,7 @@
       contentType: false,
       processData: false,
       success:function (res) {
-        console.log(res);
+        //console.log(res);
         if (res.res === '0'){
           $("#upload").modal('hide');
         }

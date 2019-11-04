@@ -3,9 +3,11 @@ var fs = require('fs');
 var multer = require('multer');
 var router = express.Router();
 var request = require('request');
+var db = require('./database.js');
+
 
 // 设置上传路径
-var uploadFolder = 'C:\\Users\\zhangjun\\Documents\\Files';
+var uploadFolder = 'C:\\\\Users\\\\zhangjun\\\\Documents\\\\Files';
 var createFolder = function(folder){
     try{
         fs.accessSync(folder);
@@ -23,13 +25,21 @@ var storage = multer.diskStorage({
     filename: function (req, file, cb) {
         // 将保存文件名设置为 字段名 + 时间戳，比如 logo-1478521468943
         // console.log(file);
-        cb(null, file.originalname+ '-' + Date.now());
-
+        let newname = file.originalname+ '-' + Date.now();
+        let fileinfo = {};
+        // fileinfo['md5'] = '';
+        fileinfo['username'] = req.cookies.userinfo.username;
+        fileinfo['originalname'] = file.originalname;
+        fileinfo['newname'] = newname;
+        fileinfo['location'] = uploadFolder;
+        db.insertFileInfo(fileinfo);
+        //console.log(file);
+        cb(null, newname);
     }
 });
 // 文件过滤
 function fileFilter(req,file,cb){
-    if (file.originalname === 'test.txt') {
+    if (file.originalname === 'test1.txt') {
         cb(null,false);
     }
     else{
@@ -48,14 +58,17 @@ router.post('/upload',upload.array('file',20),function (req,res,next) {
 
 /* 下载文件 */
 router.get('/download/*',function (req,res,next) {
-    // let f = 'C:\\Users\\zhangjun\\Documents\\Files\\test.txt';
     let filename = (req.url+'').split('/').pop();
-    let f = uploadFolder+'\\'+filename;
-    //console.log( );
-    //f = path.resolve(f);
-    //console.log('Download file: %s',f);
-    let newfilename = '';
-    res.download(f,'file');
+    let f = uploadFolder+'\\';
+    // 查询新文件名语句
+    let sql = 'SELECT newfilename FROM fileinfo WHERE originalfilename = \'';
+    sql += filename;
+    sql += '\';';
+    db.query(sql,function (ret) {
+        // console.log(ret);
+        res.download(f+ret,filename);
+    });
+    // console.log(newname);
 });
 
 

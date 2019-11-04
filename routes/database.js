@@ -11,18 +11,29 @@ mysqlconfig = {
 function connect() {
     let connection = mysql.createConnection(mysqlconfig);
     connection.connect();
-    console.log('打开数据库成功');
+    // console.log('打开数据库成功');
     return connection;
 }
-
-function createDataBase(dbname){
+exports.query = function query(sql,callback){
     let connection = connect();
-    let sql = '';
     connection.query(sql,function (err,result) {
         if (err) throw err;
-        console.log(result);
+        callback(result[0].newfilename);
     });
-}
+};
 
-createDataBase('dabs65');
-module.exports = mysqlconfig;
+exports.insertFileInfo = function insertFileInfo(fileinfo){
+    let sql = 'INSERT INTO fileinfo(md5,username,originalfilename,newfilename,location) ';
+    sql += 'VALUES ';
+    sql += '(';
+    sql += '\''+ fileinfo['md5']          +'\',';
+    sql += '\''+ fileinfo['username']     +'\',';
+    sql += '\''+ fileinfo['originalname'] +'\',';
+    sql += '\''+ fileinfo['newname']      +'\',';
+    sql += '\''+ fileinfo['location']     +'\'';
+    sql += ');';
+    this.query(sql);
+};
+
+
+//module.exports = mysqlconfig;
