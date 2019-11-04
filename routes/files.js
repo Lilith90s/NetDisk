@@ -22,15 +22,27 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         // 将保存文件名设置为 字段名 + 时间戳，比如 logo-1478521468943
-        cb(null, file.fieldname + '-' + Date.now());
+        // console.log(file);
+        cb(null, file.originalname+ '-' + Date.now());
+
     }
 });
+// 文件过滤
+function fileFilter(req,file,cb){
+    if (file.originalname === 'test.txt') {
+        cb(null,false);
+    }
+    else{
+        cb(null,true);
+    }
+    //cb(new Error('文件重复'));
+};
+
 // 通过 storage 选项来对 上传行为 进行定制化
-var upload = multer({ storage: storage });
+var upload = multer({ storage: storage,fileFilter:fileFilter });
 
 /* 上传文件 */
 router.post('/upload',upload.array('file',20),function (req,res,next) {
-    console.log(req.files);
     res.send({res:'0'});
 });
 
@@ -42,7 +54,8 @@ router.get('/download/*',function (req,res,next) {
     //console.log( );
     //f = path.resolve(f);
     //console.log('Download file: %s',f);
-    res.download(f);
+    let newfilename = '';
+    res.download(f,'file');
 });
 
 

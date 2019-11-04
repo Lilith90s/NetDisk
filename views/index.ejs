@@ -127,6 +127,7 @@
     // console.log($("#input-b9")[0].files);
     for (let i = 0,len = $("#input-b9")[0].files.length ; i < len; i++) {
       formData.append('file',$("#input-b9")[0].files[i]);
+      console.log($("#input-b9")[0].files[i]);
     };
     $.ajax({
       url: '/files/upload',
@@ -139,10 +140,10 @@
         if (res.res === '0'){
           $("#upload").modal('hide');
         }
-      }
+      },
+        fail:function (res) {
+            console.log(res);
+        }
     })
   }
-  $.ajax({
-    url:'/files'
-  })
 </script>
