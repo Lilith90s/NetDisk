@@ -81,6 +81,25 @@
                   <a href="/files/download/test.txt" download="test.txt">下载</a>
               </td>
           </tr>
+          <% for (var i = 0; i < fileinfos.length; i++) { %>
+            <tr>
+              <td>
+                <%=fileinfos[i].originalfilename%>
+              </td>
+              <td>
+                <%=fileinfos[i].type%>
+              </td>
+              <td>
+                <%=fileinfos[i].uptime%>
+              </td>
+              <td>
+                <%=fileinfos[i].size%>
+              </td>
+              <td>
+                <a href="/files/download/<%=fileinfos[i].newfilename%>" download="test.txt">下载</a>
+              </td>
+            </tr>
+          <%}%>
           </tbody>
         </table>
       </div>

@@ -24,15 +24,8 @@ var storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         // 将保存文件名设置为 字段名 + 时间戳，比如 logo-1478521468943
-        // console.log(file);
-        let newname = file.originalname+ '-' + Date.now();
-        let fileinfo = {};
-        // fileinfo['md5'] = '';
-        fileinfo['username'] = req.cookies.userinfo.username;
-        fileinfo['originalname'] = file.originalname;
-        fileinfo['newname'] = newname;
-        fileinfo['location'] = uploadFolder;
-        db.insertFileInfo(fileinfo);
+        let newname = file.originalname+ '-' + req.username;
+        // db.insertFileInfo(fileinfo);
         //console.log(file);
         cb(null, newname);
     }
@@ -53,6 +46,21 @@ var upload = multer({ storage: storage,fileFilter:fileFilter });
 
 /* 上传文件 */
 router.post('/upload',upload.array('file',20),function (req,res,next) {
+    // console.log(req.files);
+    let date = new Date();
+    for (let i = 0; i < req.files.length; i++) {
+        let file = req.files[i];
+        let fileinfo = {};
+        // fileinfo['md5'] = '';
+        fileinfo['username'] = req.cookies.userinfo.username;
+        fileinfo['originalname'] = file.originalname;
+        fileinfo['newfilename'] = file.originalname+ '-' + req.cookies.userinfo.username;
+        fileinfo['location'] = uploadFolder;
+        fileinfo['type'] = file.originalname.split('.').pop();
+        fileinfo['size'] = file.size+'KB';
+        fileinfo['uptime'] = date.toLocaleDateString();
+        db.insertFileInfo(fileinfo);
+    }
     res.send({res:'0'});
 });
 
@@ -70,6 +78,5 @@ router.get('/download/*',function (req,res,next) {
     });
     // console.log(newname);
 });
-
 
 module.exports = router;
